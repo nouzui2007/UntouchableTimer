@@ -1,5 +1,6 @@
 package com.yochiyochi.android.UntouchableTimer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UntouchableTimerActivity extends Activity implements SensorEventListener{
@@ -19,6 +21,9 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
 	private boolean hasSensor;
 	private static final int REQUEST_CODE = 16402;
 
+	static TextView tv;
+
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,11 +101,30 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
         		//タイマースタート
         	}
         }
+        
+        //オッケーな時　サービススタート　ここは後でちゃんと書くこと
+		Intent intent = new Intent(this, TimerService.class);
+		intent.putExtra("counter", timeLeft);
+		startService(intent);
+
+        
+        
         //オンなんとかなんとか
 		//タイマーからの戻り値で
 		//アラーム鳴らすおしまい
        
         //途中でセンサー感知　戻る判断
+
+		//カウントダウン処理　書きかけ
+		public static void countdown(int counter){
+    		showTime(counter);
+    	}
+    	
+    	static void showTime(int timeSeconds){
+    		SimpleDateFormat form=new SimpleDateFormat("mm:ss");
+    		tv.setText(form.format(timeSeconds*1000));
+    	}
+
     
  
 }
