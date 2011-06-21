@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,24 +14,41 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class UntouchableTimerActivity extends Activity implements SensorEventListener{
-	private SensorManager sensorMgr;
-	private boolean hasSensor;
-	private static final int REQUEST_CODE = 16402;
+	
+	//言い訳
+	//メモがわりにいろいろ書いてるけど、後でコメントきれいにします
+	//Javadocのことも薄々覚えてます
+	
+    static final String TAG = "UntouchableTimerActivity";
+    {  Log.d(TAG, "@@@---start---@@@"); }
+
+
 
 	static TextView tv;
+	static Context mContext;
+	static int timeLeft=0;
+	private SensorManager sensorMgr;
+	private boolean hasSensor;
+	private static final int REQUEST_CODE = 7856;
 
-	
-    /** Called when the activity is first created. */
-    @Override
+
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        Log.d(TAG, "onCreate1");
         sensorMgr = (SensorManager)getSystemService(SENSOR_SERVICE);
         hasSensor = false;
+        mContext=this;
+        Log.d(TAG, "onCreate2");
+    	tv=(TextView)findViewById(R.id.CountdownTimer);
+        Log.d(TAG, "onCreate3");
     }
     
     @Override
@@ -64,15 +82,19 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
     }
     
     @Override
+    //センサーを感知した時
     public void onSensorChanged(SensorEvent event)
     {
     	if(event.sensor.getType() == Sensor.TYPE_PROXIMITY)
     	{
-    		//状態により処理を変える
-    		//待ち状態・音声認識状態・タイマー実行状態・タイマー終了状態
     		if(event.values[0] < 1.0)	// 近接センサーで「近い」
     		{
-   				Intent intent = new Intent();
+    			//サービスのストップ(カウントダウン中断)
+                Intent intent = new Intent(mContext, TimerService.class);
+                mContext.stopService(intent);
+
+                //RecognizerIntentクラス=音声認識
+   				intent = new Intent();
    				intent.setAction(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
    				intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
    				try
@@ -81,7 +103,8 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
 				}
 				catch (ActivityNotFoundException e)
 				{
-					Toast.makeText(UntouchableTimerActivity.this, "音声認識がインストールされていません", Toast.LENGTH_LONG).show();
+					Toast.makeText(UntouchableTimerActivity.this,
+							"音声認識がインストールされていません", Toast.LENGTH_LONG).show();
 				}
 				//音を出す
 //    			vibrator.vibrate(50);
@@ -94,37 +117,39 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
         	if(res == Activity.RESULT_OK && req == REQUEST_CODE)
         	{
         		String resText;
-        		ArrayList<String> strList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        		ArrayList<String> strList = 
+        			data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         		resText = strList.get(0);	// 1つめの認識候補のみを採用
+        		
         		//文字解析メソッド　最初は簡単に
-        		//取得した文字列が数値じゃなければ＼(^o^)／エラーメッセージ的な物エラー音ブブー
-        		//タイマースタート
+        		if (parseResult(resText)) {
+            		//タイマーサービススタート
+                    Intent intent = new Intent(mContext, TimerService.class);
+                    intent.putExtra("counter", timeLeft);
+                    startService(intent);
+        		} else {
+            		//取得した文字列が数値じゃなければエラーメッセージ的+エラー音
+        			//後で書く
+        		}
         	}
         }
-        
-        //オッケーな時　サービススタート　ここは後でちゃんと書くこと
-		Intent intent = new Intent(this, TimerService.class);
-		intent.putExtra("counter", timeLeft);
-		startService(intent);
 
-        
-        
-        //オンなんとかなんとか
-		//タイマーからの戻り値で
-		//アラーム鳴らすおしまい
-       
-        //途中でセンサー感知　戻る判断
+		//文字解析メソッド　最初は簡単に
+        static boolean parseResult(String resText) {
+			// 後でパターンマッチ処理を書く
+			return true;
+		}
 
-		//カウントダウン処理　書きかけ
-		public static void countdown(int counter){
-    		showTime(counter);
-    	}
-    	
+		//画面のカウント更新
     	static void showTime(int timeSeconds){
     		SimpleDateFormat form=new SimpleDateFormat("mm:ss");
     		tv.setText(form.format(timeSeconds*1000));
     	}
 
-    
- 
+    	//カウントダウン処理
+    	public static void onTimerChanged(int counter){
+    		showTime(counter);
+    		timeLeft=counter;
+    	}
+
 }

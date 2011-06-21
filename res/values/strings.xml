@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, UntouchableTimerActivity!</string>
-    <string name="app_name">UntouchableTimer</string>
+    <string name="app_name">アンタッチャブルタイマー</string>
+    <string name="label_start">スタート</string>
+    <string name="label_stop">ストップ</string>
+    <string name="label_settings">アラーム設定</string>
+    <string name="message_timeup">時間です。</string>
+    <string name="label_ok">OK</string>
 </resources>

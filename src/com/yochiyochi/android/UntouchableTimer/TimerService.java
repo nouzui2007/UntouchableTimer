@@ -58,7 +58,7 @@ public class TimerService extends Service {
 							showAlarm();
 
 						}else{
-							UntouchableTimerActivity.countdown(counter);
+							UntouchableTimerActivity.onTimerChanged(counter);
 							counter=counter-1;
 							}
 					}
