@@ -3,9 +3,9 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.yochiyochi.android.UntouchableTimer"
 	android:versionCode="1"
-	android:versionName="1.0">
+	android:versionName="1.0" android:installLocation="preferExternal">
 	<uses-sdk
-		android:minSdkVersion="8" />
+		android:minSdkVersion="7" />
 	<uses-permission
 		android:name="android.permission.WAKE_LOCK" />
 	<uses-permission

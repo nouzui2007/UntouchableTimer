@@ -3,6 +3,8 @@ package com.yochiyochi.android.UntouchableTimer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -12,7 +14,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.widget.TextView;
@@ -35,20 +39,20 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
 	private SensorManager sensorMgr;
 	private boolean hasSensor;
 	private static final int REQUEST_CODE = 7856;
-
+	private Vibrator vibrator;
+    private MediaPlayer sensorcatch;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Log.d(TAG, "onCreate1");
         sensorMgr = (SensorManager)getSystemService(SENSOR_SERVICE);
         hasSensor = false;
         mContext=this;
-        Log.d(TAG, "onCreate2");
     	tv=(TextView)findViewById(R.id.CountdownTimer);
-        Log.d(TAG, "onCreate3");
+        vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+        sensorcatch = MediaPlayer.create(mContext, R.raw.sensorcatch);
     }
     
     @Override
@@ -106,8 +110,10 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
 					Toast.makeText(UntouchableTimerActivity.this,
 							"音声認識がインストールされていません", Toast.LENGTH_LONG).show();
 				}
+				//ヴァイブレーションさせる
+    			vibrator.vibrate(50);
 				//音を出す
-//    			vibrator.vibrate(50);
+    			sensorcatch.start();
     		}
     	}
     }
@@ -116,13 +122,25 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
         {
         	if(res == Activity.RESULT_OK && req == REQUEST_CODE)
         	{
-        		String resText;
-        		ArrayList<String> strList = 
-        			data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        		resText = strList.get(0);	// 1つめの認識候補のみを採用
+        		ArrayList<String> strList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        		// ここまでは、音声認識結果を取得する常套句
+
+        		// 以下、全ての音声認識候補に対して秒数を取得してみて、最も値の大きいもの(=最も期待通りに値を取れたもの)を採用
+        		// 値(秒数)は、最終的には maxVal に入る。この値をタイマーに引き渡せばよい
+        		int curVal, maxVal = 0, maxIdx = 0;
+        		for(int i = 0; i < strList.size(); i++)
+        		{
+            		//文字解析メソッド
+        			curVal = getSecondFromText(strList.get(i));
+        			if(curVal > maxVal)
+        			{
+        				maxVal = curVal;
+        				maxIdx = i;
+        			}
+        		}
         		
-        		//文字解析メソッド　最初は簡単に
-        		if (parseResult(resText)) {
+        		
+        		if (maxVal != 0) {
             		//タイマーサービススタート
                     Intent intent = new Intent(mContext, TimerService.class);
                     intent.putExtra("counter", timeLeft);
@@ -133,12 +151,6 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
         		}
         	}
         }
-
-		//文字解析メソッド　最初は簡単に
-        static boolean parseResult(String resText) {
-			// 後でパターンマッチ処理を書く
-			return true;
-		}
 
 		//画面のカウント更新
     	static void showTime(int timeSeconds){
@@ -151,5 +163,35 @@ public class UntouchableTimerActivity extends Activity implements SensorEventLis
     		showTime(counter);
     		timeLeft=counter;
     	}
+        
+    	//音声認識で取得したテキストから、秒数を抜き出す
+    	//へんな入力だと０が返ってくる
+
+        private int getSecondFromText(String str)
+        {
+        	String regexNum = "[0-9]+";		// 数字列を表現する正規表現、ほんとは [1-9][0-9]* かな
+        	String regexHMS[] = { "(時間|じかん|ジカン)", "(分|ふん|ぷん|フン|プン)", "(秒|びょう|ビョウ)" };	// 時間、分、秒の音声誤認識となりそうなものをどんどん追加
+        	Pattern ptn, ptnN;
+        	Matcher mch, mchN;
+
+//        	String s = str.replaceAll("\\s", "");	// 音声認識結果の単語間にスペースが開くことがあるので、詰める、と思ったが副作用が多そうなのでやめる
+        	String s = str;
+        	ptnN = Pattern.compile(regexNum);
+
+        	int resSecond = 0;
+        	for(int i = 0; i < 3; i++)	// 時間、分、秒の順に処理する
+        	{
+        		resSecond *= 60;
+        		ptn = Pattern.compile(regexNum + regexHMS[i]);
+        		mch = ptn.matcher(s);
+        		if(mch.find())
+        		{
+        			mchN = ptnN.matcher(mch.group());
+        			if(mchN.find())
+        				resSecond += Integer.valueOf(mchN.group());
+        		}
+        	}
+        	return resSecond;
+        }
 
 }
