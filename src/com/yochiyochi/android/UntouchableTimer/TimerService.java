@@ -9,8 +9,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import android.content.Context;
 import android.os.PowerManager;
+import android.util.Log;
 
 public class TimerService extends Service {
+
+    static final String TAG = "TimerService";
+    {  Log.d(TAG, "@@@---start---@@@"); }
 
 	Context mContext;
 	int counter;
