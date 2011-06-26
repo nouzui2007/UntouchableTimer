@@ -17,18 +17,35 @@
 			android:layout_width="wrap_content"
 			android:text="@string/count_zero"
 			android:textSize="80sp"
+			android:textColor="#FF0000"
 			android:layout_gravity="center_horizontal"></TextView>
 	</LinearLayout>
 	<LinearLayout
 		android:layout_height="wrap_content"
 		android:id="@+id/linearLayout2"
 		android:layout_width="fill_parent">
+		<ImageView
+			android:layout_height="wrap_content"
+			android:src="@android:drawable/ic_dialog_alert"
+			android:id="@+id/imageView1"
+			android:layout_width="wrap_content"></ImageView>
+		<TextView
+			android:text="@string/message_timeup"
+			android:id="@+id/textView2"
+			android:textSize="40sp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"></TextView>
+	</LinearLayout>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:id="@+id/linearLayout3"
+		android:layout_width="fill_parent">
 		<TextView
 			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:textSize="20sp"
 			android:id="@+id/sensor_message"
-			android:layout_width="fill_parent">
-		</TextView>
+			android:layout_width="fill_parent"
+			android:text="@string/hand_sensor"></TextView>
 	</LinearLayout>
 </LinearLayout>

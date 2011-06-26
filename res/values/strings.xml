@@ -6,4 +6,12 @@
     <string name="label_settings">アラーム設定</string>
     <string name="message_timeup">時間です。</string>
     <string name="label_ok">OK</string>
+    <string name="hand_sensor">タイマー音声入力するために端末に手を近づけてください</string>
+    <string name="hand_cancel">タイマーをキャンセルする場合は端末に手を近づけてください</string>
+    <string name="hand_Alarm_Stop">アラームをストップする場合は端末に手を近づけてください</string>
+    <string name="count_zero">00:00</string>
+    <string name="menu_title1">メニュー１</string>
+    <string name="menu_title2">メニュー２</string>
+    <string name="submenu_title1">subメニュー１</string>
+    <string name="submenu_title2">subメニュー２</string>
 </resources>

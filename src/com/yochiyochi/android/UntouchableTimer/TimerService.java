@@ -73,9 +73,12 @@ public class TimerService extends Service {
 	}
 
 	void showAlarm(){
+		//サービスのストップ
 		Intent intent = new Intent(mContext, TimerService.class);
 		mContext.stopService(intent);
-		intent=new Intent(mContext, AlarmDialog.class);
+		
+		//アラーム画面の起動
+		intent=new Intent(mContext, AlarmActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		mContext.startActivity(intent);
 	}
