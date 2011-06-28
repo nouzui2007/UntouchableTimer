@@ -24,7 +24,7 @@ public class SpeechAnalyzer
 	// 音声認識結果の文字列リストから最適な秒数値を取得する
 	public static int speechToSecond(ArrayList<String> strList)
 	{
-		return speechToSecond(strList, USE_MUNITE_IF_NO_UNIT);	// 文字列が数値のみの場合の単位の指定が無かった場合は、デフォルトとして「分」を使う
+		return getSecond(getCandidate(strList), USE_MUNITE_IF_NO_UNIT);	// 文字列が数値のみの場合の単位の指定が無かった場合は、デフォルトとして「分」を使う
 	}
 
 	// 音声認識結果の文字列リストから最適な秒数値を取得する (デフォルトの単位を指定する場合)
@@ -125,7 +125,7 @@ public class SpeechAnalyzer
 	private static boolean isExactHMS(String str)
 	{
 		if(str != null && !str.equals(""))
-			if(Pattern.compile("^("+regexNum+regexExactHMS[0]+")?\\s*("+regexNum+regexExactHMS[1]+")?\\s*("+regexNum+regexExactHMS[2]+")?$").matcher(str).find())
+			if(Pattern.compile("^\\s*("+regexNum+"\\s*"+regexExactHMS[0]+")?\\s*("+regexNum+"\\s*"+regexExactHMS[1]+")?\\s*("+regexNum+"\\s*"+regexExactHMS[2]+")?\\s*$").matcher(str).find())
 				return true;
 		return false;
 	}
@@ -148,7 +148,7 @@ public class SpeechAnalyzer
 	{
 		if(str != null && !str.equals(""))
 		{
-			Matcher mch = Pattern.compile("^"+regexNum+"$").matcher(str);
+			Matcher mch = Pattern.compile("^\\s*"+regexNum+"\\s*$").matcher(str);
 			if(mch.find())
 				return Integer.valueOf(mch.group());
 		}
@@ -165,56 +165,62 @@ public class SpeechAnalyzer
 	}
 	
 	// 漢数字や全角数字を半角数字に変換した結果を返す
-	private static String kanjiToAlabic(String str)
+	// 本当は private でよい。デバッグ用に public
+	public static String kanjiToAlabic(String str)
 	{
-/* うまく動いていないので、とりあえずコメントアウト 2011-06-26
 		final String regexKanNum[] = { "零|０", "一|１", "二|２", "三|３", "四|４", "五|５", "六|６", "七|７", "八|８", "九|９" };
 		final String regexKanUnit[] = { "", "十", "百", "千", "万" };	// 桁を表す文字。まあ、万まであればいいでしょ。ただし1文字だけね。
 		Matcher mch, mchN;
+		StringBuffer strBuf = new StringBuffer();
 		
 		if(str != null && !str.equals(""))
 		{
 			// まず単純に数字を半角数字にする
 			for(int i = 0; i < regexKanNum.length; i++)
-			{
-	    		mch = Pattern.compile(regexKanNum[i]).matcher(str);
-	    		while(mch.find())
-	    			str = mch.replaceAll(Integer.valueOf(i).toString());
-	    	}
+				str = str.replaceAll(regexKanNum[i], Integer.valueOf(i).toString());
 			// 数字の右に単位が付いていないものは、一の位と考えて「/数値/」という文字列に置き換える
-			mch = Pattern.compile("("+regexNum+")[^"+regexKanUnit[1]+regexKanUnit[2]+regexKanUnit[3]+regexKanUnit[4]+"]").matcher(str);
+			strBuf.setLength(0);
+			mch = Pattern.compile("("+regexNum+")([^[0-9]"+regexKanUnit[1]+regexKanUnit[2]+regexKanUnit[3]+regexKanUnit[4]+"])").matcher(str);
 			while(mch.find())
-				str = mch.replaceAll("/"+mch.group(1)+"/");
+				mch.appendReplacement(strBuf, "/"+mch.group(1)+"/"+mch.group(2));
+			mch.appendTail(strBuf);
+			str = strBuf.toString();
+			// 数字の右に文字が無いものは、一の位と考えて「/数値/」という文字列に置き換える
+			strBuf.setLength(0);
+			mch = Pattern.compile("("+regexNum+")(\\s*)$").matcher(str);
+			while(mch.find())
+				mch.appendReplacement(strBuf, "/"+mch.group(1)+"/"+mch.group(2));
+			mch.appendTail(strBuf);
+			str = strBuf.toString();
 			// 数字の右に単位が付いているものは、その単位の数値と考えて「/数値/」という文字列に置き換える
 			for(int i = 1; i < regexKanUnit.length; i++)
 			{
+				strBuf.setLength(0);
 				mch = Pattern.compile("("+regexNum+")"+regexKanUnit[i]).matcher(str);
 				while(mch.find())
-					str = mch.replaceAll("/"+Integer.valueOf(Integer.valueOf(mch.group(1))*(int)Math.pow(10, i)).toString()+"/");
+					mch.appendReplacement(strBuf, "/"+Integer.valueOf(Integer.valueOf(mch.group(1))*(int)Math.pow(10, i)).toString()+"/");
+				mch.appendTail(strBuf);
+				str = strBuf.toString();
 			}
-			// 残る「十」「百」「千」は、「/10/」「/100/」「/1000/」にする
+			// 残る「十」「百」「千」は、「(10)」「(100)」「(1000)」にする
 			for(int i = 1; i < regexKanUnit.length-1; i++)
-			{
-				mch = Pattern.compile("("+regexKanUnit[i]+")").matcher(str);
-				while(mch.find())
-					str = mch.replaceAll("/"+Integer.valueOf((int)Math.pow(10, i)).toString()+"/");
-			}
+				str = str.replaceAll(regexKanUnit[i], "/"+Integer.valueOf((int)Math.pow(10, i)).toString()+"/");
 			// 残る「万」は、「」(空)にする
-			mch = Pattern.compile("("+regexKanUnit[4]+")").matcher(str);
-			while(mch.find())
-				str = mch.replaceAll("");
+			str = str.replaceAll(regexKanUnit[4], "");
 			// 最後に数値を統合する
+			strBuf.setLength(0);
 			mch = Pattern.compile("(/"+regexNum+"/)+").matcher(str);
 			while(mch.find())
 			{
-				mchN = Pattern.compile("/("+regexNum+")/").matcher(str);
 				int num = 0;
+				mchN = Pattern.compile("/("+regexNum+")/").matcher(mch.group());
 				while(mchN.find())
 					num += Integer.valueOf(mchN.group(1));
-				str = mch.replaceAll(Integer.valueOf(num).toString());
+				mch.appendReplacement(strBuf, Integer.valueOf(num).toString());
 			}
+			mch.appendTail(strBuf);
+			str = strBuf.toString();
 		}
-*/
 		return str;
 	}
 }
