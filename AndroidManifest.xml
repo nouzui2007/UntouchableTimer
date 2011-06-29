@@ -3,32 +3,29 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.yochiyochi.android.UntouchableTimer"
 	android:versionCode="1"
-	android:versionName="1.0" android:installLocation="preferExternal">
-	<uses-sdk
-		android:minSdkVersion="7" />
-	<uses-permission
-		android:name="android.permission.WAKE_LOCK" />
-	<uses-permission
-		android:name="android.permission.VIBRATE" />
+	android:versionName="1.0"
+	android:installLocation="preferExternal">
+	<uses-sdk android:minSdkVersion="7" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.VIBRATE" />
 
 	<application
 		android:icon="@drawable/icon"
-		android:label="@string/app_name">
+		android:label="@string/app_name"
+		android:theme="@style/CustomTheme.Black">
 		<activity
 			android:name=".UntouchableTimerActivity"
 			android:screenOrientation="portrait"
 			android:configChanges="keyboardHidden|orientation"
-			android:label="@string/app_name">
+			android:label="@string/app_name"
+			android:theme="@style/CustomTheme.Black">
 			<intent-filter>
-				<action
-					android:name="android.intent.action.MAIN" />
-				<category
-					android:name="android.intent.category.LAUNCHER" />
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<service
-			android:name="TimerService" />
-		<activity
-			android:name="AlarmActivity" />
+		<service android:name="TimerService" />
+		<activity android:name="AlarmActivity" />
+		<activity android:name="SettingActivity" />
 	</application>
 </manifest>
