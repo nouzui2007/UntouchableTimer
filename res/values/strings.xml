@@ -2,9 +2,15 @@
 <resources>
     <string name="app_name">UntouchableTimer</string>
     <string name="message_timeup">時間です!</string>
-    <string name="message_waiting">タイマーに音声入力するために端末に手を近づけてください</string>
+    <string name="message_waiting">電話を手に近づけて、振動したら一呼吸置いて、話してください</string>
     <string name="message_cancel">タイマーをキャンセルする場合は端末に手を近づけてください</string>
     <string name="message_Alarm_Stop">アラームをストップする場合は端末に手を近づけてください</string>
+    <string name="message_talk_to_phone">タイマーにセットする時間をお話下さい。（５秒・１分３０秒・９０秒のように話しかけて下さい）</string>
+
+    <string name="message_error_recognize">認識出来ませんでした。もう一度端末に手を近づけてください</string>
+    <string name="message_no_voice_recognition">音声認識アプリがインストールされていないようです</string>
+    <string name="message_no_webbrowser">Webブラウザがインストールされていないようです</string>
+    <string name="message_no_mailer">メールアプリがインストールされていないようです</string>
     
     <string name="app_version">1.0</string>
     <string name="app_release">2011-07-17</string>
@@ -44,8 +50,5 @@
     <string name="pref_defval_subject">安否確認</string>
     <string name="pref_helppage_url">http://android.ojami.net/</string>
     <string name="confirm_format">%1$s (正しい値ですか?)</string>
-    <string name="message_no_voice_recognition">音声認識アプリがインストールされていないようです</string>
-    <string name="message_no_webbrowser">Webブラウザがインストールされていないようです</string>
-    <string name="message_no_mailer">メールアプリがインストールされていないようです</string>
     
 </resources>

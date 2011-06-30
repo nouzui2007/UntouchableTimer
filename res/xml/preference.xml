@@ -4,6 +4,7 @@
 		<CheckBoxPreference
 			android:title="@string/pref_title_vibrator"
 			android:summary="@string/pref_summary_vibrator"
-			android:key="@string/pref_key_vibrator"></CheckBoxPreference>
+			android:key="@string/pref_key_vibrator">
+		</CheckBoxPreference>
 	</PreferenceCategory>
 </PreferenceScreen>

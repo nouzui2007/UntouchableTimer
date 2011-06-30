@@ -4,7 +4,7 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:padding="30dp"
+	android:padding="25dp"
 	android:background="@color/color_basic1">
 	<LinearLayout
 		android:id="@+id/linearLayout1"
@@ -16,7 +16,7 @@
 		<TextView
 			android:padding="20dip"
 			android:id="@+id/CountdownTimer"
-			android:textSize="80sp"
+			android:textSize="60sp"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			android:layout_gravity="center"></TextView>
@@ -29,7 +29,7 @@
 			android:id="@+id/imageView1" android:layout_width="wrap_content"></ImageView> -->
 		<TextView
 			android:id="@+id/message1"
-			android:textSize="40sp"
+			android:textSize="35sp"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
@@ -40,9 +40,9 @@
 		<TextView
 			android:layout_height="wrap_content"
 			android:gravity="center"
-			android:textSize="20sp"
 			android:id="@+id/sensor_message"
 			android:layout_width="fill_parent"
+			android:textSize="20sp"
 			android:textColor="@color/color_basic2">
 		</TextView>
 	</LinearLayout>
