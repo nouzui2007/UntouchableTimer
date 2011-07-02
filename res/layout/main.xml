@@ -5,45 +5,58 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:padding="25dp"
-	android:background="@color/color_basic1">
+	android:background="@color/color_white">
 	<LinearLayout
-		android:id="@+id/linearLayout1"
 		android:layout_width="fill_parent"
 		android:orientation="vertical"
 		android:layout_weight="1"
 		android:layout_height="fill_parent"
 		android:background="@color/color_white">
 		<TextView
-			android:padding="20dip"
+			android:padding="30dip"
 			android:id="@+id/CountdownTimer"
 			android:textSize="60sp"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
+			android:background="@color/color_basic1"
 			android:layout_gravity="center"></TextView>
 	</LinearLayout>
 	<LinearLayout
 		android:layout_height="wrap_content"
-		android:id="@+id/linearLayout2"
 		android:layout_width="fill_parent">
-		<!-- <ImageView android:layout_height="wrap_content" android:src="@android:drawable/ic_dialog_alert" 
-			android:id="@+id/imageView1" android:layout_width="wrap_content"></ImageView> -->
 		<TextView
 			android:id="@+id/message1"
-			android:textSize="35sp"
+			android:textSize="30sp"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
 	<LinearLayout
 		android:layout_height="wrap_content"
-		android:id="@+id/linearLayout2"
 		android:layout_width="fill_parent">
 		<TextView
 			android:layout_height="wrap_content"
-			android:gravity="center"
 			android:id="@+id/sensor_message"
 			android:layout_width="fill_parent"
-			android:textSize="20sp"
+			android:textSize="15sp"
 			android:textColor="@color/color_basic2">
 		</TextView>
+	</LinearLayout>
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Volume:"
+			android:id="@+id/ringVolText"
+			android:textColor="@color/color_black" />
+		<SeekBar
+			android:id="@+id/ringVolSeekBar"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:progressDrawable="@drawable/seekprogress"></SeekBar>
+
 	</LinearLayout>
 </LinearLayout>

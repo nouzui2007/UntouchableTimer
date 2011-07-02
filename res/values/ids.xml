@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="pref_key_sound">sound</string>
     <string name="pref_key_vibrator">vibrator</string>
-    <string name="pref_key_gooffice">gooffice</string>
-    <string name="pref_key_company">company</string>
-    <string name="pref_key_employee">employee</string>
-    <string name="pref_key_address1">address1</string>
-    <string name="pref_key_address2">address2</string>
-    <string name="pref_key_subject">subject</string>
-    <string name="pref_code_true">1</string>
-    <string name="pref_code_false">2</string>
 </resources>

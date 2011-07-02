@@ -1,54 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">UntouchableTimer</string>
-    <string name="message_timeup">時間です!</string>
-    <string name="message_waiting">電話を手に近づけて、振動したら一呼吸置いて、話してください</string>
-    <string name="message_cancel">タイマーをキャンセルする場合は端末に手を近づけてください</string>
-    <string name="message_Alarm_Stop">アラームをストップする場合は端末に手を近づけてください</string>
-    <string name="message_talk_to_phone">タイマーにセットする時間をお話下さい。（５秒・１分３０秒・９０秒のように話しかけて下さい）</string>
+	<string name="app_name">UntouchableTimer</string>
+	<string name="message_timeup">時間です!</string>
+	<string name="message_waiting">電話を手に近づけて、振動したら一呼吸置いて、話してください</string>
+	<string name="message_cancel">タイマーをキャンセルする場合は端末に手を近づけてください</string>
+	<string name="message_Alarm_Stop">アラームをストップする場合は端末に手を近づけてください</string>
+	<string name="message_talk_to_phone">タイマーにセットする時間をお話下さい。（５秒・１分３０秒・９０秒のように話しかけて下さい）
+	</string>
+	<string name="message_wait_recognize">音声受信しました・・・</string>
+	<string name="message_wait_analyze">音声解析中・・・</string>
 
-    <string name="message_error_recognize">認識出来ませんでした。もう一度端末に手を近づけてください</string>
-    <string name="message_no_voice_recognition">音声認識アプリがインストールされていないようです</string>
-    <string name="message_no_webbrowser">Webブラウザがインストールされていないようです</string>
-    <string name="message_no_mailer">メールアプリがインストールされていないようです</string>
-    
-    <string name="app_version">1.0</string>
-    <string name="app_release">2011-07-17</string>
-    <string name="app_author">よちよちAndroidサンデープログラミングの会 </string>
-    <string name="app_author_mail">https://sites.google.com/site/beginandroid2011/</string>
-    <string name="app_dlg_format">Version: %1$s\nRelease: %2$s\n\nPresented by %3$s\n\t&lt;%4$s&gt;</string>
+	<string name="message_error_recognize">認識出来ませんでした。もう一度端末に手を近づけてください</string>
+	<string name="message_error_analyze">解析出来ませんでした。もう一度端末に手を近づけてください</string>
+	<string name="message_no_voice_recognition">音声認識アプリがインストールされていないようです</string>
+	<string name="message_no_webbrowser">Webブラウザがインストールされていないようです</string>
+	<string name="message_no_mailer">メールアプリがインストールされていないようです</string>
 
-    <string name="menu_title_setting">設定</string>
-    <string name="menu_title_help">使い方</string>
-    <string name="menu_title_about">アプリについて</string>
+	<string name="app_version">1.0</string>
+	<string name="app_release">2011-07-17</string>
+	<string name="app_author">よちよちAndroidサンデープログラミングの会 </string>
+	<string name="app_author_mail">https://sites.google.com/site/beginandroid2011/
+	</string>
+	<string name="app_dlg_format">Version: %1$s\nRelease: %2$s\n\nPresented by
+		%3$s\n\t&lt;%4$s&gt;</string>
 
-    <string name="pref_cattitle_sound">音とバイブレーションの設定</string>
-    <string name="pref_title_vibrator">バイブレーション</string>
-    <string name="pref_summary_vibrator">バイブレーションのON/OFFを切り替えます</string>
+	<string name="menu_title_setting">設定</string>
+	<string name="menu_title_help">使い方</string>
+	<string name="menu_title_about">アプリについて</string>
 
-    <string name="pref_cattitle_safe">安否</string>
-    <string name="pref_title_safe">無事です</string>
-    <string name="pref_summary_safe">無事であればチェックしてください</string>
-    <string name="pref_title_gooffice">出社可能です</string>
-    <string name="pref_summary_gooffice">出社可能であればチェックしてください</string>
-    <string name="pref_cattitle_person">本人情報</string>
-    <string name="pref_title_company">会社コード</string>
-    <string name="pref_defval_company">※必ず設定してください</string>
-    <string name="pref_dlgmsg_company">会社コードを入力してください(例:000001)</string>
-    <string name="pref_title_employee">社員番号</string>
-    <string name="pref_defval_employee">※必ず設定してください</string>
-    <string name="pref_dlgmsg_employee">社員番号を入力してください(例:0123456)</string>
-    <string name="pref_cattitle_mail">メール設定</string>
-    <string name="pref_title_address1">送信先アドレス(1)</string>
-    <string name="pref_defval_address1">dummy1@xxx.jp</string>
-    <string name="pref_dlgmsg_address1">メールアドレスを入力してください</string>
-    <string name="pref_title_address2">送信先アドレス(2)</string>
-    <string name="pref_defval_address2">dummy2@xxx.jp</string>
-    <string name="pref_dlgmsg_address2">メールアドレスを入力してください</string>
-    <string name="pref_title_subject">表題</string>
-    <string name="pref_dlgmsg_subject">メール表題を入力してください</string>
-    <string name="pref_defval_subject">安否確認</string>
-    <string name="pref_helppage_url">http://android.ojami.net/</string>
-    <string name="confirm_format">%1$s (正しい値ですか?)</string>
-    
+	<string name="pref_cattitle_sound">音とバイブレーションの設定</string>
+	<string name="pref_title_sound">アラーム音の種類</string>
+	<string name="pref_summary_sound">アラームの種類を設定します</string>
+	<string name="pref_title_vibrator">バイブレーション</string>
+	<string name="pref_summary_vibrator">アラーム鳴動時のバイブレーションのON/OFFを切り替えます</string>
+
+	<string name="help_message">
+		Untouchable Timer\n（アンタッチャブルタイマー）\n
+		by
+		よちよちAndroidサンデープログラミングの会\n
+		\n
+		スマートフォンに向かって時間を話しかけると、その時間をタイマーにセットしてアラームを鳴らします。【最新Version 1.0】\n\n
+		\n
+		《動作環境》\n\n
+		・本アプリは、Android2.2(SHARP IS03)搭載端末で動作確認しています。\n\n
+		・端末に、近接センサー、バイブレーター機能が搭載されている必要があります。\n\n
+		・端末にGoogle音声入力がインストールされている必要があります。\n\n
+		\n
+		《使い方》\n\n
+		※端末の通信機能をオンに設定してインターネットに繋がるようにして下さい。\n\n
+		\n
+		1.アプリを起動するとタイマー画面が表示されます。\n\n
+		2.端末に手を近づけて下さい。近接センサーは電話を耳に付ける付近にあることが多いようです。\n\n
+		3.近接センサーが反応すると、端末が振動しますので少し間を開けてから、タイマーにセット
+		したい時間を電話に向かってお話下さい。\n\n
+		4.音声が正しく認識されるとタイマーが起動します。認識に失敗した場合や、思ったのと
+		違う時間がセットされてしまったら、もう一度端末に手を近づけてやり直して下さい。
+		騒音の多い場所だと誤認識が増えてしまうことがあるようです。\n\n
+		5.タイマーのアラームを停止するには、もう一度端末に手を近づけて下さい。\n\n
+		6.アンタッチャブルタイマーを終了するには、端末の戻るキーを押してください。\n\n
+		\n
+		《メニューを開く》\n\n
+		端末の「メニュー」キーを押すと、メニューが表示されます。各メニュー項目をタッチすると
+		別の画面やダイアログが表示されます。\n
+		各メニュー項目については、以下をご覧下さい。\n
+		\n
+		・設定\n
+		アラーム音とバイブレーションの設定をします。\n
+		アラーム音のところを押すといくつかのアラーム音候補が表示されます。\n
+		選択したいアラーム音を押してください。\n
+		この画面を閉じるには、、端末の戻るキーを押してください。\n\n
+		バイブレーションのチェックボックスを押すとアラーム鳴動時にバイブレーションのON/OFFを設定できます。\n
+		\n
+		・使い方\n
+		アプリの使い方（この画面です）を表示します。\n
+		この画面を閉じるには、、端末の戻るキーを押してください。\n\n
+		\n
+		・アプリについて\n
+		アプリのバージョン、リリース日、よちよちAndroidサンデープログラミングの会のホームページ
+		へのリンクが記載されたダイアログが表示されます。\n
+		ダイアログを閉じるには、、端末の戻るキーを押してください。\n
+	</string>
+
 </resources>

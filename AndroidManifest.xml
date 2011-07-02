@@ -28,5 +28,6 @@
 		<service android:name="TimerService" />
 		<activity android:name="AlarmActivity" />
 		<activity android:name="SettingActivity" />
+		<activity android:name="HelpActivity" />
 	</application>
 </manifest>
