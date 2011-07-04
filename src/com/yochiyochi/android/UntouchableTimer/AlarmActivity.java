@@ -14,22 +14,21 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.Vibrator;
-import android.preference.ListPreference;
-import android.provider.Settings;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-
-
 public class AlarmActivity extends Activity implements SensorEventListener {
 
+	static final String TAG = "AlarmActivity";
+	{
+		Log.d(TAG, "@@@---start---@@@");
+	}
 
 	Context mContext;
 	Ringtone rt;
@@ -52,15 +51,16 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Log.d(TAG, "onCreate1");
 		setContentView(R.layout.main);
 
 		mContext = this;
 		sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
 		hasSensor = false;
 
-		PowerManager pm=(PowerManager) getSystemService(Context.POWER_SERVICE);
-		wl=pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK+PowerManager.ON_AFTER_RELEASE, "My Tag");
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK
+				+ PowerManager.ON_AFTER_RELEASE, "My Tag");
 		wl.acquire();
 
 		vib = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -75,7 +75,7 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 		tv_message1.setTextColor(Color.RED);
 		tv_sensor_message = (TextView) findViewById(R.id.sensor_message);
 		tv_sensor_message.setText(R.string.message_Alarm_Stop);
-		
+
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 		am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		int ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); // 音量の取得
 		ringVolSeekBar = (SeekBar) findViewById(R.id.ringVolSeekBar); // 音量シークバー
-		ringVolSeekBar.setMax(am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)); //最大音量の設定
+		ringVolSeekBar.setMax(am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)); // 最大音量の設定
 		ringVolText = (TextView) findViewById(R.id.ringVolText); // 音量TextView
 		ringVolText.setText("Volume:" + ringVolume); // TextViewに設定値を表示
 		am.setStreamVolume(AudioManager.STREAM_MUSIC, ringVolume, 0); // 着信音量設定
@@ -122,8 +122,8 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 					SensorManager.SENSOR_DELAY_NORMAL);
 		}
 
-		SharedPreferences prefs;
-		prefs = this.getSharedPreferences("UntouchableTimerPrefs", 0);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		pref_sound = prefs.getString(
 				(String) getResources().getText(R.string.pref_key_sound), "");
 		if (pref_sound == null)
@@ -137,27 +137,22 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 				(String) getResources().getText(R.string.pref_key_vibrator),
 				true);
 
-//		Uri fn = Uri.parse(prefs.getString("alarm", ""));
-//
-//		if (fn != null) {
-//			rt = RingtoneManager.getRingtone(this, fn);
-//			System.out.println(fn.toString());
-//		} else {
-//			rt = RingtoneManager.getRingtone(this,
-//					Settings.System.DEFAULT_ALARM_ALERT_URI);
-//		}
-
 		switch (Integer.valueOf(pref_sound).intValue()) {
 		case 1:
-			alarm = null; break;
+			alarm = null;
+			break;
 		case 2:
-			alarm = MediaPlayer.create(mContext, R.raw.alarm1); break;
+			alarm = MediaPlayer.create(mContext, R.raw.alarm1);
+			break;
 		case 3:
-			alarm = MediaPlayer.create(mContext, R.raw.alarm2); break;
+			alarm = MediaPlayer.create(mContext, R.raw.alarm2);
+			break;
 		case 4:
-			alarm = MediaPlayer.create(mContext, R.raw.alarm3); break;
+			alarm = MediaPlayer.create(mContext, R.raw.alarm3);
+			break;
 		case 5:
-			alarm = MediaPlayer.create(mContext, R.raw.sensorcatch); break;
+			alarm = MediaPlayer.create(mContext, R.raw.sensorcatch);
+			break;
 		}
 		if (alarm != null) {
 			alarm.setLooping(true);
@@ -179,13 +174,15 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 			hasSensor = false;
 		}
 		// アラーム音を消す
-		alarm.stop();
+		if (alarm != null) {
+			alarm.stop();
+		}
 	}
 
 	@Override
 	public void onAccuracyChanged(Sensor arg0, int arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -201,5 +198,3 @@ public class AlarmActivity extends Activity implements SensorEventListener {
 	}
 
 }
-
-

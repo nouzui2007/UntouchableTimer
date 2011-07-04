@@ -17,7 +17,7 @@ public class TimerService extends Service {
     {  Log.d(TAG, "@@@---start---@@@"); }
 
 	Context mContext;
-	int counter;
+	long counter;
 	Timer timer;
 	public PowerManager.WakeLock wl;
 

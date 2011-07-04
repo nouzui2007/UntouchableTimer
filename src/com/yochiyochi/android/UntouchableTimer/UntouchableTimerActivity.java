@@ -9,7 +9,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -59,8 +58,7 @@ public class UntouchableTimerActivity extends Activity implements
 
 	private Vibrator vibrator;
 
-	// やっぱりいちいち鳴らすのはやめようと思う・・
-	// private MediaPlayer sensorcatch;
+	private MediaPlayer sensorcatch;
 
 	AudioManager am;
 	SeekBar ringVolSeekBar;
@@ -92,15 +90,20 @@ public class UntouchableTimerActivity extends Activity implements
 		tv_message1.setText("");
 		tv_sensor_message = (TextView) findViewById(R.id.sensor_message);
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-		// sensorcatch = MediaPlayer.create(mContext, R.raw.sensorcatch);
+		Log.d(TAG, "onCreate2");
+		sensorcatch = MediaPlayer.create(mContext, R.raw.sensorcatch);
 
 		// 自動的に画面ロックしないようにする
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		Log.d(TAG, "onCreate3");
+
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		// プリファレンスの値を読み込む
+		loadSetting();
 
 		// アラーム音量
 		am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -135,8 +138,6 @@ public class UntouchableTimerActivity extends Activity implements
 					}
 				});
 
-		// プリファレンスの値を読み込む
-		loadSetting();
 
 		// サービスのストップ(カウントダウン中断)
 		Intent intent = new Intent(mContext, TimerService.class);
@@ -157,7 +158,6 @@ public class UntouchableTimerActivity extends Activity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		saveSetting();
 
 		// センサーリスナー終了
@@ -226,23 +226,30 @@ public class UntouchableTimerActivity extends Activity implements
 		if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
 			if (event.values[0] < 1.0) // 近接センサーで「近い」
 			{
-				// 画面メッセージ
-				tv_sensor_message.setText("");
-				// サービスのストップ(カウントダウン中断)
-				Intent intentTimer = new Intent(mContext, TimerService.class);
-				mContext.stopService(intentTimer);
-				tv.setText("00:00");
+				// 音声認識スタート
+				startSpeechRecognizer();
 
-				// SpeechRecognizer
-				rec.startListening(RecognizerIntent
-						.getVoiceDetailsIntent(getApplicationContext()));
-
-				// ヴァイブレーションさせる
-				vibrator.vibrate(50);
-				// 音を出す
-				// sensorcatch.start();
 			}
 		}
+	}
+
+	// 音声認識スタート
+	private void startSpeechRecognizer() {
+		// 音を出す
+//		sensorcatch.start();
+		// 画面メッセージ
+		tv_sensor_message.setText("");
+		// サービスのストップ(カウントダウン中断)
+		Intent intentTimer = new Intent(mContext, TimerService.class);
+		mContext.stopService(intentTimer);
+		tv.setText("00:00");
+
+		// SpeechRecognizer
+		rec.startListening(RecognizerIntent
+				.getVoiceDetailsIntent(getApplicationContext()));
+
+		// ヴァイブレーションさせる
+		vibrator.vibrate(30);
 	}
 
 	// プリファレンスの値を読み込む
@@ -253,9 +260,9 @@ public class UntouchableTimerActivity extends Activity implements
 				(String) getResources().getText(R.string.pref_key_sound), "");
 		Log.d(TAG, "loadSetting() pref_sound =" + pref_sound);
 		if (pref_sound == null)
-			pref_sound = "1";
+			pref_sound = "2";
 		else if (pref_sound.equals(""))
-			pref_sound = "1";
+			pref_sound = "2";
 		String[] sounds = getResources().getStringArray(R.array.entries);
 
 		String selected_sound = sounds[Integer.parseInt(pref_sound) - 1];
@@ -269,17 +276,22 @@ public class UntouchableTimerActivity extends Activity implements
 	private void saveSetting() {
 		SharedPreferences pref = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		Editor edt = pref.edit();
+		SharedPreferences.Editor edt = pref.edit();
 		edt.putString((String) getResources().getText(R.string.pref_key_sound),
 				pref_sound);
+		Log.d(TAG, "saveSetting() pref_key_sound =" + ((String) getResources().getText(R.string.pref_key_sound)));
+		Log.d(TAG, "saveSetting() pref_sound =" + pref_sound);
 		edt.putBoolean(
 				(String) getResources().getText(R.string.pref_key_vibrator),
 				pref_vibrator);
+		Log.d(TAG, "saveSetting() pref_key_vibrator =" + ((String) getResources().getText(R.string.pref_key_vibrator)));
+		Log.d(TAG, "saveSetting() pref_vibrator =" + pref_vibrator);
 		edt.commit();
 	}
 
 	// 画面のカウント更新
-	static void showTime(int timeSeconds) {
+	static void showTime(long timeSeconds) {
+		Log.d(TAG, "showTime timeSeconds=" + timeSeconds);
 		SimpleDateFormat form = new SimpleDateFormat("mm:ss");
 		tv.setText(form.format(timeSeconds * 1000));
 		// 画面メッセージ
@@ -287,7 +299,7 @@ public class UntouchableTimerActivity extends Activity implements
 	}
 
 	// カウントダウン処理
-	public static void onTimerChanged(int counter) {
+	public static void onTimerChanged(long counter) {
 		showTime(counter);
 	}
 
@@ -320,6 +332,7 @@ public class UntouchableTimerActivity extends Activity implements
 
 			ArrayList<String> strList = results
 					.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION); // 音声認識結果を取得
+			Log.d(TAG, "onActivityResult Arraylist:" + strList);
 
 			int result = SpeechAnalyzer.speechToSecond(strList); // 音声認識結果から秒数値を取得する、この値をタイマーにセットする
 
@@ -353,8 +366,10 @@ public class UntouchableTimerActivity extends Activity implements
 		}
 
 		public void onError(int error) {
-			// 画面メッセージ
+			// 画面メッセージ（一瞬）
 			tv_sensor_message.setText(R.string.message_error_recognize);
+			// 音声認識スタート
+//			startSpeechRecognizer();
 		}
 
 		public void onEvent(int eventType, Bundle params) {

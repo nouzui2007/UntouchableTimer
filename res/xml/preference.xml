@@ -7,11 +7,13 @@
 			android:key="@string/pref_key_sound"
 			android:entries="@array/entries"
 			android:entryValues="@array/entryValues"
-			android:dialogTitle="@string/pref_title_sound" />
+			android:dialogTitle="@string/pref_title_sound"
+			android:defaultValue="2" />
 		<CheckBoxPreference
 			android:title="@string/pref_title_vibrator"
 			android:summary="@string/pref_summary_vibrator"
-			android:key="@string/pref_key_vibrator">
+			android:key="@string/pref_key_vibrator"
+			android:defaultValue="true">
 		</CheckBoxPreference>
 	</PreferenceCategory>
 </PreferenceScreen>
