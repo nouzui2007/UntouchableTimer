@@ -12,7 +12,7 @@
 
 	<application
 		android:icon="@drawable/icon"
-		android:label="@string/app_name" android:theme="@style/CustomTheme.light">
+		android:label="@string/app_name" android:theme="@style/CustomTheme.light" android:debuggable="true">
 		<activity
 			android:name=".UntouchableTimerActivity"
 			android:screenOrientation="portrait"

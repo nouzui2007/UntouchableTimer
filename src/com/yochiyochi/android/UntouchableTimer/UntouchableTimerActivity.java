@@ -16,6 +16,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -27,6 +28,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -92,7 +95,21 @@ public class UntouchableTimerActivity extends Activity implements
 		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		Log.d(TAG, "onCreate2");
 		sensorcatch = MediaPlayer.create(mContext, R.raw.sensorcatch);
-
+		//add by makiuchi
+		sensorcatch.setOnCompletionListener(new OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				startSpeechRecognizer();
+			}
+		});
+		findViewById(R.id.Button01).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sensorcatch.start();
+			}
+		});
+		//add by makiuchi end
+		
 		// 自動的に画面ロックしないようにする
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		Log.d(TAG, "onCreate3");
@@ -226,8 +243,11 @@ public class UntouchableTimerActivity extends Activity implements
 		if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
 			if (event.values[0] < 1.0) // 近接センサーで「近い」
 			{
+				//add by makiuchi
+				sensorcatch.start();
 				// 音声認識スタート
-				startSpeechRecognizer();
+				//comment out by makiuchi
+//				startSpeechRecognizer();
 
 			}
 		}
@@ -387,4 +407,5 @@ public class UntouchableTimerActivity extends Activity implements
 		}
 
 	}
+
 }
